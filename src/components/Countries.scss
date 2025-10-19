@@ -1,0 +1,64 @@
+.countries-container {
+    padding: 1rem;
+    height: 100%;
+    font-family: "Segoe UI", sans-serif;
+
+    .countries-header {
+        position: fixed;
+        display: flex;
+        flex-direction: column;
+        background: white;
+        z-index: 100;
+        top: 0;
+        left: 2rem;
+        width: 95%;
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+
+            input, select {
+                padding: 8px 12px;
+                font-size: 1rem;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+            }
+
+            input {
+                flex: 1;
+                min-width: 250px;
+            }
+        }
+    }
+
+    .spinner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    }
+
+    .countries-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 16px;
+        margin-top: 100px;
+    }
+}
