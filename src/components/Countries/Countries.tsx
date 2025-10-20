@@ -4,16 +4,8 @@ import "./Countries.scss";
 import { VscError } from "react-icons/vsc";
 import { Input, Select, Flex, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-
-interface Country {
-  name: { common: string };
-  flags: { png: string; svg: string };
-  population: number;
-  capital?: string[];
-}
-
-type SortField = "name" | "population";
-type SortOrder = "asc" | "desc";
+import type { Country, SortField, SortOrder } from "@/types/Countries";
+import sortCountries from "../../utils/countries";
 
 export default function Countries() {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -61,22 +53,6 @@ export default function Countries() {
     );
     setFiltered(sortCountries(results, sortField, sortOrder));
   }, [search, sortField, sortOrder, countries]);
-
-  const sortCountries = (
-    list: Country[],
-    field: SortField,
-    order: SortOrder
-  ) => {
-    return [...list].sort((a, b) => {
-      if (field === "name") {
-        const compare = a.name.common.localeCompare(b.name.common);
-        return order === "asc" ? compare : -compare;
-      } else {
-        const compare = a.population - b.population;
-        return order === "asc" ? compare : -compare;
-      }
-    });
-  };
 
   // Handlers
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) =>
