@@ -1,4 +1,3 @@
-import React from "react";
 import "./CountryCard.scss";
 import { BsPeopleFill } from "react-icons/bs";
 import { GiCapitol } from "react-icons/gi";
@@ -10,12 +9,12 @@ interface CountryCardProps {
   population: number;
 }
 
-const CountryCard: React.FC<CountryCardProps> = ({
+export default function CountryCard({
   name,
   flag,
   capital,
   population,
-}) => {
+}: CountryCardProps) {
   return (
     <div className="country-card">
       <div className="country-header">
@@ -31,11 +30,10 @@ const CountryCard: React.FC<CountryCardProps> = ({
           <p>{capital || "N/A"}</p>
         </div>
         <div className="info-container">
-          <BsPeopleFill /> <p>{population.toLocaleString()}</p>
+          <BsPeopleFill />
+          <p>{population.toLocaleString()}</p>
         </div>
       </div>
     </div>
   );
-};
-
-export default CountryCard;
+}
