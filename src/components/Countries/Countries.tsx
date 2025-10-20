@@ -1,5 +1,5 @@
 import { useEffect, useState, type ChangeEvent } from "react";
-import CountryCard from "./CountryCard";
+import CountryCard from "../CountryCard/CountryCard";
 import "./Countries.scss";
 import { VscError } from "react-icons/vsc";
 import { Input, Select, Flex, Spin } from "antd";

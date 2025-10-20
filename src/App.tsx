@@ -1,5 +1,5 @@
-import Countries from "./components/Countries";
-import "./App.css";
+import Countries from "./components/Countries/Countries";
+import "./App.scss";
 
 function App() {
   return <Countries />;
