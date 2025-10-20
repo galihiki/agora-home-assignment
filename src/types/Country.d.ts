@@ -7,3 +7,10 @@ export interface Country {
 
 export type SortField = "name" | "population";
 export type SortOrder = "asc" | "desc";
+
+export interface CountryCardProps {
+  name: string;
+  flag: string;
+  capital?: string;
+  population: number;
+}

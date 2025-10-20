@@ -1,4 +1,4 @@
-import type { Country, SortField, SortOrder } from "@/types/Countries";
+import type { Country, SortField, SortOrder } from "@/types/Country";
 
 export default function sortCountries(
     list: Country[],

@@ -4,7 +4,7 @@ import "./Countries.scss";
 import { VscError } from "react-icons/vsc";
 import { Input, Select, Flex, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import type { Country, SortField, SortOrder } from "@/types/Countries";
+import type { Country, SortField, SortOrder } from "@/types/Country";
 import sortCountries from "../../utils/countries";
 
 export default function Countries() {
@@ -77,29 +77,25 @@ export default function Countries() {
             onChange={handleSearch}
           />
 
-          <div className="select-container">
-            <Select
-              defaultValue="name"
-              style={{ width: 160, height: 40, textAlign: "left" }}
-              onChange={handleSortFieldChange}
-              options={[
-                { value: "name", label: "Sort by Name" },
-                { value: "population", label: "Sort by Population" },
-              ]}
-            />
-          </div>
+          <Select
+            defaultValue="name"
+            className="field select"
+            onChange={handleSortFieldChange}
+            options={[
+              { value: "name", label: "Sort by Name" },
+              { value: "population", label: "Sort by Population" },
+            ]}
+          />
 
-          <div className="select-container">
-            <Select
-              defaultValue="asc"
-              style={{ width: 120, height: 40, textAlign: "left" }}
-              onChange={handleSortOrderChange}
-              options={[
-                { value: "asc", label: "Ascending" },
-                { value: "desc", label: "Descending" },
-              ]}
-            />
-          </div>
+          <Select
+            defaultValue="asc"
+            className="order select"
+            onChange={handleSortOrderChange}
+            options={[
+              { value: "asc", label: "Ascending" },
+              { value: "desc", label: "Descending" },
+            ]}
+          />
         </div>
       </div>
 
