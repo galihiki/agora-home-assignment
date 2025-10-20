@@ -2,6 +2,7 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import CountryCard from "./CountryCard";
 import "./Countries.scss";
 import { VscError } from "react-icons/vsc";
+import { Input, Select } from "antd";
 
 interface Country {
   name: { common: string };
@@ -22,7 +23,7 @@ export default function Countries() {
   const [loading, setLoading] = useState<boolean>(true);
   const [fetchError, setFetchError] = useState<string>("");
 
-  // 🧩 Fetch countries
+  // Fetch countries
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -81,39 +82,51 @@ export default function Countries() {
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) =>
     setSearch(e.target.value);
 
-  const handleSortFieldChange = (e: ChangeEvent<HTMLSelectElement>) =>
-    setSortField(e.target.value as SortField);
+  const handleSortFieldChange = (value: SortField) => setSortField(value);
 
-  const handleSortOrderChange = (e: ChangeEvent<HTMLSelectElement>) =>
-    setSortOrder(e.target.value as SortOrder);
+  const handleSortOrderChange = (value: SortOrder) => setSortOrder(value);
 
   return (
     <div className="countries-container">
       <div className="countries-header">
-        <h2>🌍 Countries ({filtered.length})</h2>
+        <h2 className="title">Countries ({filtered.length})</h2>
 
         {/* Controls */}
         <div className="controls">
-          <input
+          <Input
             type="text"
+            style={{ height: 40 }}
             placeholder="Search countries..."
             value={search}
             onChange={handleSearch}
           />
 
-          <select value={sortField} onChange={handleSortFieldChange}>
-            <option value="name">Sort by Name</option>
-            <option value="population">Sort by Population</option>
-          </select>
+          <div className="select-container">
+            <Select
+              defaultValue="name"
+              style={{ width: 160, height: 40, textAlign: "left" }}
+              onChange={handleSortFieldChange}
+              options={[
+                { value: "name", label: "Sort by Name" },
+                { value: "population", label: "Sort by Population" },
+              ]}
+            />
+          </div>
 
-          <select value={sortOrder} onChange={handleSortOrderChange}>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
+          <div className="select-container">
+            <Select
+              defaultValue="asc"
+              style={{ width: 120, height: 40, textAlign: "left" }}
+              onChange={handleSortOrderChange}
+              options={[
+                { value: "asc", label: "Ascending" },
+                { value: "desc", label: "Descending" },
+              ]}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Cards Grid */}
       {loading && (
         <div className="spinner-container">
           <div className="spinner"></div>
@@ -130,6 +143,7 @@ export default function Countries() {
         </div>
       )}
 
+      {/* Cards Grid */}
       {!loading && !fetchError && (
         <div className="countries-grid">
           {filtered.map((country) => (
