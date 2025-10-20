@@ -1,7 +1,7 @@
 import "./CountryCard.scss";
 import { BsPeopleFill } from "react-icons/bs";
 import { GiCapitol } from "react-icons/gi";
-import type { CountryCardProps } from "@/types/Country";
+import type { CountryCardProps } from "@/types/country";
 
 export default function CountryCard({
   name,
@@ -25,7 +25,7 @@ export default function CountryCard({
         </div>
         <div className="info-container">
           <BsPeopleFill />
-          <p>{population.toLocaleString()}</p>
+          <p>{population?.toLocaleString()}</p>
         </div>
       </div>
     </div>

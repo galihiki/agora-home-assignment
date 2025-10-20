@@ -4,49 +4,31 @@ import "./Countries.scss";
 import { VscError } from "react-icons/vsc";
 import { Input, Select, Flex, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-import type { Country, SortField, SortOrder } from "@/types/Country";
+import type { Country, SortField, SortOrder } from "@/types/country";
 import sortCountries from "../../utils/countries";
+import { useFetchCountries } from "../../hooks/api/useFetchCountries";
 
 export default function Countries() {
-  const [countries, setCountries] = useState<Country[]>([]);
   const [filtered, setFiltered] = useState<Country[]>([]);
   const [search, setSearch] = useState<string>("");
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
-  const [loading, setLoading] = useState<boolean>(true);
-  const [fetchError, setFetchError] = useState<string>("");
+
+  const errorMessage =
+    "Sorry, we couldn’t load the countries. Please try again later.";
 
   // Fetch countries
-  useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const res = await fetch(
-          "https://restcountries.com/v3.1/all?fields=name,flags,population,capital"
-        );
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        const data: Country[] = await res.json();
-        if (!Array.isArray(data)) {
-          throw new Error("Unexpected data format");
-        }
-        setCountries(data);
-        setFiltered(sortCountries(data, sortField, sortOrder));
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setFetchError(
-          "Sorry, we couldn’t load the countries. Please try again later."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCountries();
-  }, []);
+  const {
+    data: countries,
+    isLoading,
+    error,
+  } = useFetchCountries({
+    fields: "name,flags,population,capital", // send fields directly in URL
+  });
 
   // Filter and sort
   useEffect(() => {
+    if (!countries) return;
     const query = search.toLowerCase();
     const results = countries.filter((c) =>
       c.name.common.toLowerCase().includes(query)
@@ -99,7 +81,7 @@ export default function Countries() {
         </div>
       </div>
 
-      {loading && (
+      {isLoading && (
         <div className="message-container">
           <Flex align="center" gap="middle">
             <Spin indicator={<LoadingOutlined spin />} size="large" />
@@ -108,17 +90,17 @@ export default function Countries() {
         </div>
       )}
 
-      {fetchError && (
+      {error && (
         <div className="message-container">
           <h2 className="error-message">
             <VscError className="error-icon" />
-            {fetchError}
+            {errorMessage}
           </h2>
         </div>
       )}
 
       {/* Cards Grid */}
-      {!loading && !fetchError && (
+      {!isLoading && !error && (
         <div className="countries-grid">
           {filtered.map((country, index) => (
             <CountryCard
