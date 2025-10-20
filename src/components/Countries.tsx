@@ -2,7 +2,8 @@ import { useEffect, useState, type ChangeEvent } from "react";
 import CountryCard from "./CountryCard";
 import "./Countries.scss";
 import { VscError } from "react-icons/vsc";
-import { Input, Select } from "antd";
+import { Input, Select, Flex, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 interface Country {
   name: { common: string };
@@ -52,7 +53,7 @@ export default function Countries() {
     fetchCountries();
   }, []);
 
-  // 🔍 Filter and sort dynamically
+  // Filter and sort
   useEffect(() => {
     const query = search.toLowerCase();
     const results = countries.filter((c) =>
@@ -61,7 +62,6 @@ export default function Countries() {
     setFiltered(sortCountries(results, sortField, sortOrder));
   }, [search, sortField, sortOrder, countries]);
 
-  // 🔽 Sort helper
   const sortCountries = (
     list: Country[],
     field: SortField,
@@ -78,7 +78,7 @@ export default function Countries() {
     });
   };
 
-  // 🔧 Handlers
+  // Handlers
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) =>
     setSearch(e.target.value);
 
@@ -128,14 +128,16 @@ export default function Countries() {
       </div>
 
       {loading && (
-        <div className="spinner-container">
-          <div className="spinner"></div>
-          <h2>Loading countries...</h2>
+        <div className="message-container">
+          <Flex align="center" gap="middle">
+            <Spin indicator={<LoadingOutlined spin />} size="large" />
+          </Flex>
+          <h2 className="loading-message">Loading...</h2>
         </div>
       )}
 
       {fetchError && (
-        <div className="spinner-container">
+        <div className="message-container">
           <h2 className="error-message">
             <VscError className="error-icon" />
             {fetchError}
@@ -146,9 +148,9 @@ export default function Countries() {
       {/* Cards Grid */}
       {!loading && !fetchError && (
         <div className="countries-grid">
-          {filtered.map((country) => (
+          {filtered.map((country, index) => (
             <CountryCard
-              key={country.name.common}
+              key={index}
               name={country.name.common}
               flag={country.flags.png}
               capital={country.capital?.[0]}
