@@ -1,6 +1,7 @@
 import "./CountryCard.scss";
 import { BsPeopleFill } from "react-icons/bs";
 import { GiCapitol } from "react-icons/gi";
+import { Tooltip } from "antd";
 
 interface CountryCardProps {
   name: string;
@@ -18,10 +19,9 @@ export default function CountryCard({
   return (
     <div className="country-card">
       <div className="country-header">
-        <h3>
-          {name}
-          <span className="tooltiptext">{name}</span>
-        </h3>
+        <Tooltip title={name}>
+          <h3>{name}</h3>
+        </Tooltip>
         <img src={flag} alt={name} className="country-flag" />
       </div>
       <div className="country-info">

@@ -17,27 +17,6 @@
         text-overflow: ellipsis;
         overflow: hidden;
         max-width: 200px;
-
-        .tooltiptext {
-            visibility: hidden;
-            font-size: 10px;
-            background-color: #322F35;
-            color: #F5EFF7;
-            text-align: center;
-            padding: 5px;
-            border-radius: 5px;
-            position: absolute;
-            bottom: 95%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        &:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
     }
 
     .country-flag {
