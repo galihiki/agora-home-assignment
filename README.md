@@ -8,11 +8,44 @@ It fetches data from a public REST API and displays it in a responsive UI with s
 
 - Fetching data with `useQuery` from TanStack Query.
 - Responsive grid layout using CSS modules.
+- Ant Design (antd) components for a modern, consistent, and accessible UI
 - Search and sort functionality by name and population.
 - Custom reusable components (CountryCard, countries, CountriesControls).
 - Dockerfile included for easy setup and deployment.
 
-## Notes for Reviewer
+🧰 Tech Stack
+
+- Frontend Framework:
+
+React — Component-based UI library
+
+TypeScript — Strongly typed JavaScript for safer, scalable code
+
+- UI & Styling:
+
+Ant Design (antd) — UI component library for consistent design
+
+SCSS Modules — For modular, maintainable, and responsive styling
+
+React Icons — Lightweight icon integration
+
+- Data:
+
+TanStack Query (React Query) — Fetching, caching, and syncing server data
+
+- Build & Tooling:
+
+Vite — Fast build tool and development server
+
+ESLint + Prettier — Code quality and formatting
+
+- Deployment:
+
+Docker — Containerization for consistent environments
+
+Nginx — Lightweight web server for production builds
+
+## Note for Reviewer
 
 - This Dockerfile was developed and tested on Windows, but the build runs in a Linux container (Alpine).
 
