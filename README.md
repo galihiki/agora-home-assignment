@@ -17,6 +17,22 @@ docker run -p 3000:80 agora
 -p 3000:80 — maps host port 3000 to container port 80.
 Open your browser at 👉 http://localhost:3000 to view the app.
 
+## ⚡ Running the React App (Vite)
+
+This project uses **[Vite](https://vitejs.dev/)** as the build tool for a fast React development experience.
+
+### 🧩 1️⃣ Prerequisites
+
+Make sure you have the following installed:
+
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### 🚀 2️⃣ Install Dependencies
+
+From the project root, run:
+npm install
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
