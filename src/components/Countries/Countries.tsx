@@ -24,7 +24,7 @@ export default function Countries() {
     isLoading,
     error,
   } = useFetchCountries({
-    fields: "name,flags,population,capital", // send fields directly in URL
+    fields: "name,flags,population,capital",
   });
 
   // Filter and sort
