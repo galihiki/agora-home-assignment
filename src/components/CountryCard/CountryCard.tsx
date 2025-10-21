@@ -1,7 +1,13 @@
 import "./CountryCard.scss";
 import { BsPeopleFill } from "react-icons/bs";
 import { GiCapitol } from "react-icons/gi";
-import type { CountryCardProps } from "@/types/country";
+
+interface CountryCardProps {
+  name: string;
+  flag: string;
+  capital?: string;
+  population: number;
+}
 
 export default function CountryCard({
   name,

@@ -2,47 +2,6 @@
     padding: 1rem;
     font-family: "Segoe UI", sans-serif;
 
-    .countries-header {
-        position: fixed;
-        display: flex;
-        flex-direction: column;
-        background: white;
-        z-index: 100;
-        top: 0;
-        left: 0;
-        padding: 2rem 2rem 0;
-        width: 100%;
-
-        .title {
-            text-align: left;
-        }
-
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1rem;
-
-            input {
-                flex: 1;
-                min-width: 250px;
-                max-width: 500px;
-            }
-
-            .select {
-                height: 40px;
-                text-align: left;
-            }
-            .field {
-                width: 160px;
-            }
-
-            .order {
-                width: 120px;
-            }
-        }
-    }
-
     .message-container {
         display: flex;
         justify-content: center;

@@ -1,12 +1,13 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import CountryCard from "../CountryCard/CountryCard";
 import "./Countries.scss";
 import { VscError } from "react-icons/vsc";
-import { Input, Select, Flex, Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import type { Country, SortField, SortOrder } from "@/types/country";
 import sortCountries from "../../utils/countries";
 import { useFetchCountries } from "../../hooks/api/useFetchCountries";
+import CountriesControls from "../CountriesControls/CountriesControls";
+import { Flex, Spin } from "antd";
 
 export default function Countries() {
   const [filtered, setFiltered] = useState<Country[]>([]);
@@ -36,51 +37,17 @@ export default function Countries() {
     setFiltered(sortCountries(results, sortField, sortOrder));
   }, [search, sortField, sortOrder, countries]);
 
-  // Handlers
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) =>
-    setSearch(e.target.value);
-
-  const handleSortFieldChange = (value: SortField) => setSortField(value);
-
-  const handleSortOrderChange = (value: SortOrder) => setSortOrder(value);
-
   return (
     <div className="countries-container">
-      <div className="countries-header">
-        <h2 className="title">Countries ({filtered.length})</h2>
-
-        {/* Controls */}
-        <div className="controls">
-          <Input
-            type="text"
-            style={{ height: 40 }}
-            placeholder="Search countries..."
-            value={search}
-            onChange={handleSearch}
-          />
-
-          <Select
-            defaultValue="name"
-            className="field select"
-            onChange={handleSortFieldChange}
-            options={[
-              { value: "name", label: "Sort by Name" },
-              { value: "population", label: "Sort by Population" },
-            ]}
-          />
-
-          <Select
-            defaultValue="asc"
-            className="order select"
-            onChange={handleSortOrderChange}
-            options={[
-              { value: "asc", label: "Ascending" },
-              { value: "desc", label: "Descending" },
-            ]}
-          />
-        </div>
-      </div>
-
+      <CountriesControls
+        search={search}
+        sortField={sortField}
+        sortOrder={sortOrder}
+        countriesCount={filtered.length}
+        onSearchChange={(e) => setSearch(e.target.value)}
+        onSortFieldChange={setSortField}
+        onSortOrderChange={setSortOrder}
+      />
       {isLoading && (
         <div className="message-container">
           <Flex align="center" gap="middle">
