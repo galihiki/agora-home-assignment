@@ -28,7 +28,6 @@ export default function CountriesControls({
       <div className="controls">
         <Input
           type="text"
-          style={{ height: 40 }}
           placeholder="Search countries..."
           value={search}
           onChange={onSearchChange}
