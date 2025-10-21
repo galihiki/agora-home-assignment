@@ -1,6 +1,6 @@
 import { type ChangeEvent } from "react";
 import { Input, Select } from "antd";
-import type { SortField, SortOrder } from "@/types/country";
+import type { SortField, SortOrder } from "../../types/country";
 import "./CountriesControls.scss";
 
 interface CountriesControlsProps {
