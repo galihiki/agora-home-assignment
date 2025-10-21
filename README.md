@@ -1,3 +1,17 @@
+## 🏠 Agora Home Assignment
+
+📖 Project Overview
+This project is a frontend application built with **React + TypeScript + Vite**.  
+It fetches data from a public REST API and displays it in a responsive UI with sorting, searching, and loading/error states.
+
+**Main features:**
+
+- Fetching data with `useQuery` from TanStack Query.
+- Responsive grid layout using CSS modules.
+- Search and sort functionality by name and population.
+- Custom reusable components (CountryCard, countries, CountriesControls).
+- Dockerfile included for easy setup and deployment.
+
 ## 🐳 Running the App with Docker
 
 You can build and run this application using **Docker** without installing Node.js or dependencies locally.
