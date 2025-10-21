@@ -1,5 +1,5 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
-import type { Country } from "../../types/country.ts";
+import type { Country } from "../../types/country.d.ts";
 
 type Params = Record<string, string | number | boolean | undefined>;
 

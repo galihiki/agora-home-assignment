@@ -1,4 +1,4 @@
-import type { Country, SortField, SortOrder } from "../types/country.ts";
+import type { Country, SortField, SortOrder } from "../types/country.d.ts";
 
 export default function sortCountries(
     list: Country[],
