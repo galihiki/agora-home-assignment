@@ -3,7 +3,7 @@ import CountryCard from "../CountryCard/CountryCard";
 import "./Countries.scss";
 import { VscError } from "react-icons/vsc";
 import { LoadingOutlined } from "@ant-design/icons";
-import type { Country, SortField, SortOrder } from "@/types/country";
+import type { Country, SortField, SortOrder } from "../../types/country.ts";
 import sortCountries from "../../utils/countries";
 import { useFetchCountries } from "../../hooks/api/useFetchCountries";
 import CountriesControls from "../CountriesControls/CountriesControls";
