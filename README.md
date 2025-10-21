@@ -12,6 +12,10 @@ It fetches data from a public REST API and displays it in a responsive UI with s
 - Custom reusable components (CountryCard, countries, CountriesControls).
 - Dockerfile included for easy setup and deployment.
 
+## Notes for Reviewer
+
+- This Dockerfile was developed and tested on Windows, but the build runs in a Linux container (Alpine).
+
 ## 🐳 Running the App with Docker
 
 You can build and run this application using **Docker** without installing Node.js or dependencies locally.
