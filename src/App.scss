@@ -1,8 +1,14 @@
 #root {
-  width: 100%;
+  width: 100vw;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
+
+  .app-container {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+  }
 
   .error-message {
       background-color: #ffe6e6;

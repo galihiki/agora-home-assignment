@@ -1,12 +1,10 @@
 .countries-header {
-    position: fixed;
+    position: sticky;
     display: flex;
     flex-direction: column;
     background: white;
     z-index: 100;
     top: 0;
-    left: 0;
-    padding: 2rem 2rem 0;
     width: 100%;
 
     .title {
