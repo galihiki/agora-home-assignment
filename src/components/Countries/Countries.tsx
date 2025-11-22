@@ -5,9 +5,9 @@ import { VscError } from "react-icons/vsc";
 import { LoadingOutlined } from "@ant-design/icons";
 import type { Country, SortField, SortOrder } from "../../types/country";
 import sortCountries from "../../utils/countries";
-import { useFetchCountries } from "../../hooks/api/useFetchCountries";
 import CountriesControls from "../CountriesControls/CountriesControls";
 import { Flex, Spin } from "antd";
+import { useCountriesContext } from "../../context/CountriesContext";
 
 export default function Countries() {
   const [filtered, setFiltered] = useState<Country[]>([]);
@@ -15,17 +15,10 @@ export default function Countries() {
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
 
+  const { countries, isLoading, error } = useCountriesContext();
+
   const errorMessage =
     "Sorry, we couldn’t load the countries. Please try again later.";
-
-  // Fetch countries
-  const {
-    data: countries,
-    isLoading,
-    error,
-  } = useFetchCountries({
-    fields: "name,flags,population,capital,languages",
-  });
 
   // Filter and sort
   useEffect(() => {
