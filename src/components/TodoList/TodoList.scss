@@ -1,32 +1,42 @@
 .todo-list-container{
-    width: 100%;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
+    flex: 1;
+    min-width: 0;
 
     .todo-list{
         list-style-type: none;
 
         .item-container {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             margin-bottom: 0.5rem;
-            border-bottom: 1px gray dashed;
+            background-color: lightsteelblue;
+            border-radius: 1rem;
             padding: 0.75rem;
+            white-space: nowrap;
 
 
             .title{
                 min-width: 200px;
                 margin-right: 4rem;
-            }
-
-            .action{
-                border-radius: 8px;
-                margin-right: 1rem;
-                min-width: 4rem;
+                text-align: start;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
         }
+    }
+
+    input {
+        border-radius: 8px;
+    }
+
+    .action{
+        border-radius: 8px;
+        margin: 0 0.5rem;
+        min-width: 4rem;
     }
 }

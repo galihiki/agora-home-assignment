@@ -84,7 +84,9 @@ export default function TodoList() {
       <div className="actions">
         <div>
           <input type="text" value={todoContent} onChange={handleInputChange} />
-          <button onClick={addTodoItem}>Add</button>
+          <button className="action" onClick={addTodoItem}>
+            Add
+          </button>
         </div>
       </div>
     </div>
