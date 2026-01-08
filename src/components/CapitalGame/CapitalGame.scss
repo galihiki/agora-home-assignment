@@ -1,0 +1,24 @@
+.game-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .card {
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .selected {
+        border: 2px solid blue;
+    }
+
+    .correct {
+        border: 2px solid green;
+    }
+
+    .wrong {
+        border: 2px solid red;
+    }
+}

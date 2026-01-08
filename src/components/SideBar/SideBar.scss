@@ -27,18 +27,25 @@
         padding: 1rem;
         display: flex;
         flex-direction: column;
+        
         .link {
+            display: flex;
+            align-items: center;
             text-decoration: none;
             color: black;
             padding: 0.25rem;
+            
+            .link-lable {
+                margin-left: 0.5rem;
+            }
         }
     }
 }
 
 .sidebar-expand {
-    width: 200px;
+    min-width: 200px;
 }
 
 .sidebar-collaps {
-    width: 100px;
+    min-width: 70px;
 }

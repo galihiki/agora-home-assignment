@@ -3,6 +3,7 @@ export interface Country {
   flags: { png: string; svg: string };
   population: number;
   capital?: string[];
+  languages: {};
 }
 
 export type SortField = "name" | "population";

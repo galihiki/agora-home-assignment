@@ -1,6 +1,9 @@
+import type { IconType } from "./Icon";
+
 export interface SideBarItem {
   title: string;
   iconName: string;
+  iconType: IconType;
   path: string;
 }
 
