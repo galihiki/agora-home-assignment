@@ -8,6 +8,7 @@ import { CountriesContext } from "./context/CountriesContext";
 import Dashboard from "./components/Dashboard/Dashboard";
 import CapitalGame from "./components/CapitalGame/CapitalGame";
 import TodoList from "./components/TodoList/TodoList";
+import MessageBoard from "./components/messageBoard/messageBoard";
 
 function App() {
   const items: SideBarItem[] = [
@@ -35,6 +36,12 @@ function App() {
       iconType: "MD",
       path: "/todo",
     },
+    {
+      title: "Message Board",
+      iconName: "MdListAlt",
+      iconType: "MD",
+      path: "/messageBoard",
+    },
   ];
 
   // Fetch countries
@@ -55,6 +62,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/capital-game" element={<CapitalGame />} />
           <Route path="/todo" element={<TodoList />} />
+          <Route path="/messageBoard" element={<MessageBoard />} />
         </Routes>
       </CountriesContext.Provider>
     </div>
