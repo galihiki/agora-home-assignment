@@ -1,0 +1,14 @@
+.tree-menu-container {
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.loading,
+.no-items,
+.error {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
