@@ -1,24 +1,26 @@
 .game-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 
-    .card {
-        padding: 10px;
-        border-radius: 8px;
-    }
+  .card {
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: solid gray 1px;
+  }
 
-    .selected {
-        border: 2px solid blue;
-    }
+  .selected {
+    border: 2px solid blue;
+  }
 
-    .correct {
-        border: 2px solid green;
-    }
+  .correct {
+    border: 2px solid green;
+  }
 
-    .wrong {
-        border: 2px solid red;
-    }
+  .wrong {
+    border: 2px solid red;
+  }
 }

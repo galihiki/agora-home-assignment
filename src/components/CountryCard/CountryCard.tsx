@@ -2,22 +2,31 @@ import "./CountryCard.scss";
 import { BsPeopleFill } from "react-icons/bs";
 import { GiCapitol } from "react-icons/gi";
 import { Tooltip } from "antd";
+import React from "react";
 
 interface CountryCardProps {
   name: string;
   flag: string;
   capital?: string;
   population: number;
+  isSelected: boolean;
+  onSelect: (value: string) => void;
 }
 
-export default function CountryCard({
+function CountryCard({
   name,
   flag,
   capital,
   population,
+  isSelected,
+  onSelect,
 }: CountryCardProps) {
+  console.log("card render!!!  " + isSelected + " " + name);
   return (
-    <div className="country-card">
+    <div
+      className={isSelected ? "country-card selected" : "country-card"}
+      onClick={() => onSelect(name)}
+    >
       <div className="country-header">
         <Tooltip title={name}>
           <h3>{name}</h3>
@@ -37,3 +46,4 @@ export default function CountryCard({
     </div>
   );
 }
+export default React.memo(CountryCard);
