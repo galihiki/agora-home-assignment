@@ -1,3 +1,4 @@
+import React from "react";
 import { type ChangeEvent } from "react";
 import { Input, Select } from "antd";
 import type { SortField, SortOrder } from "../../types/country";
@@ -13,13 +14,16 @@ interface CountriesControlsProps {
   onSortOrderChange: (value: SortOrder) => void;
 }
 
-export default function CountriesControls({
+function CountriesControls({
   search,
+  sortField,
+  sortOrder,
   countriesCount,
   onSearchChange,
   onSortFieldChange,
   onSortOrderChange,
 }: CountriesControlsProps) {
+  console.log("Child render");
   return (
     <div className="countries-header">
       <h2 className="title">Countries ({countriesCount})</h2>
@@ -34,7 +38,7 @@ export default function CountriesControls({
         />
 
         <Select
-          defaultValue="name"
+          value={sortField}
           className="field select"
           onChange={onSortFieldChange}
           options={[
@@ -44,7 +48,7 @@ export default function CountriesControls({
         />
 
         <Select
-          defaultValue="asc"
+          value={sortOrder}
           className="order select"
           onChange={onSortOrderChange}
           options={[
@@ -56,3 +60,5 @@ export default function CountriesControls({
     </div>
   );
 }
+
+export default React.memo(CountriesControls);
