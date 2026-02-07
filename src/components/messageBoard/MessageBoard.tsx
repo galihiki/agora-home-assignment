@@ -7,21 +7,22 @@ export default function MessageBoard() {
   const [userMessage, setUserMessage] = useState<string>("");
 
   useEffect(() => {
-    let intervalId: number | undefined = undefined;
-    function getMessage() {
-      intervalId = setInterval(async () => {
+    const intervalId = setInterval(async () => {
+      try {
         const res = await fetch(
           "https://official-joke-api.appspot.com/jokes/random",
         );
         const message: Message = await res.json();
         setMessageList((prev) => [...prev, message]);
-      }, 10000);
-    }
-    getMessage();
+      } catch (error) {
+        console.log(error);
+      }
+    }, 10000);
     return () => clearInterval(intervalId);
-  });
+  }, []);
 
-  const sendMessageHandler = () => {
+  const sendMessageHandler = (e: React.FormEvent) => {
+    e.preventDefault();
     const newMessage = {
       id: crypto.randomUUID(),
       type: "user",
@@ -29,6 +30,7 @@ export default function MessageBoard() {
       punchline: "",
     };
     setMessageList((pre) => [...pre, newMessage]);
+    setUserMessage("");
   };
 
   return (
@@ -38,22 +40,20 @@ export default function MessageBoard() {
         {messageList.map((message) => (
           <li
             key={message.id}
-            className={
-              message.type === "user"
-                ? "message-container user-message"
-                : "message-container regular-message"
-            }
+            className={`message-container ${message.type === "user" ? "user-message" : "regular-message"}`}
           >
             <div className="message">{message.setup}</div>
           </li>
         ))}
       </ul>
       <div>
-        <input
-          value={userMessage}
-          onChange={(e) => setUserMessage(e.target.value)}
-        />
-        <button onClick={sendMessageHandler}>Send</button>
+        <form onSubmit={sendMessageHandler}>
+          <input
+            value={userMessage}
+            onChange={(e) => setUserMessage(e.target.value)}
+          />
+          <button type="submit">Send</button>
+        </form>
       </div>
     </div>
   );
