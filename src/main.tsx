@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import "antd/dist/reset.css";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 
 const queryClient = new QueryClient();
 
@@ -12,8 +13,10 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        <ChakraProvider value={defaultSystem}>
+          <App />
+        </ChakraProvider>
       </BrowserRouter>
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 );

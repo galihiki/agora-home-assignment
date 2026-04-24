@@ -1,0 +1,15 @@
+.table-container {
+  height: 100%;
+  display: flex;
+  overflow-y: scroll;
+
+  .table {
+    border-collapse: collapse;
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+  }
+}
