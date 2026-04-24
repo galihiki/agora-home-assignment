@@ -1,0 +1,13 @@
+.tree-menu-new-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: scroll;
+  width: 50%;
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

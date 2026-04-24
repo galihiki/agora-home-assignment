@@ -2,14 +2,16 @@ import type { TreeItemData } from "@/types/tree";
 import { useEffect, useState } from "react";
 import "./TreeItem.scss";
 import { useTreeContext } from "../../../context/TreeMenuContext";
+import React from "react";
 
 interface TreeItemProps {
   treeItem: TreeItemData;
+  isSelected: (id: string) => boolean;
 }
 
-export function TreeItem({ treeItem }: TreeItemProps) {
+function TreeItemNode({ treeItem, isSelected }: TreeItemProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { expandAll, searchQuery, selected, setSelected } = useTreeContext();
+  const { expandAll, searchQuery, toggleSelected } = useTreeContext();
   console.log(treeItem.label);
 
   useEffect(() => {
@@ -45,16 +47,10 @@ export function TreeItem({ treeItem }: TreeItemProps) {
 
   const hasChildren = treeItem.children.length > 0;
 
-  const isSelected = selected.includes(treeItem.id);
-
   const selectHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     const checked = e.target.checked;
-    setSelected((prev) => {
-      return checked
-        ? [...prev, treeItem.id]
-        : prev.filter((id) => id !== treeItem.id);
-    });
+    toggleSelected(treeItem.id, checked);
   };
 
   return (
@@ -66,7 +62,7 @@ export function TreeItem({ treeItem }: TreeItemProps) {
         <input
           className="checkBox"
           type="checkbox"
-          checked={isSelected}
+          checked={isSelected(treeItem.id)}
           onChange={selectHandler}
           onClick={(e) => e.stopPropagation()}
         />
@@ -81,10 +77,23 @@ export function TreeItem({ treeItem }: TreeItemProps) {
       {isOpen && (
         <div>
           {treeItem.children.map((child) => {
-            return <TreeItem key={child.id} treeItem={child} />;
+            return (
+              <TreeItem
+                key={child.id}
+                treeItem={child}
+                isSelected={isSelected}
+              />
+            );
           })}
         </div>
       )}
     </div>
   );
 }
+
+export const TreeItem = React.memo(
+  TreeItemNode,
+  (prev, next) =>
+    prev.treeItem.id === next.treeItem.id &&
+    prev.isSelected === next.isSelected,
+);

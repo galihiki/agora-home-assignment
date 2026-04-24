@@ -1,7 +1,7 @@
 import type { TreeItemData } from "../../../types/tree";
 import { useEffect, useMemo, useState } from "react";
+import type { ChangeEvent } from "react";
 import { TreeItem } from "../treeMenuItem/TreeItem";
-import { type ChangeEvent } from "react";
 import { useDebounce } from "../../../hooks/actions/useDebounce";
 import "./TreeMenu.scss";
 import { TreeContext } from "../../../context/TreeMenuContext";
@@ -71,6 +71,18 @@ export default function TreeMenu() {
     setExpandAll((prev) => !prev);
   };
 
+  const isSelected = (id: string) => {
+    return selected.includes(id);
+  };
+
+  const toggleSelected = (id: string, checked: boolean) => {
+    setSelected((prev) => {
+      return checked
+        ? [...prev, id]
+        : prev.filter((selectedId) => selectedId !== id);
+    });
+  };
+
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
   if (treeMenuData.length === 0)
@@ -89,16 +101,22 @@ export default function TreeMenu() {
           </button>
         </div>
         <TreeContext.Provider
-          value={{ expandAll, searchQuery, selected, setSelected }}
+          value={{ expandAll, searchQuery, toggleSelected }}
         >
           {filteredTree.map((child) => {
-            return <TreeItem key={child.id} treeItem={child} />;
+            return (
+              <TreeItem
+                key={child.id}
+                treeItem={child}
+                isSelected={isSelected}
+              />
+            );
           })}
         </TreeContext.Provider>
       </div>
       <div>
         {selected.map((s) => (
-          <div>{s}</div>
+          <div key={s}>{s}</div>
         ))}
       </div>
     </>

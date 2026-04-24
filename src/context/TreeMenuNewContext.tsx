@@ -1,15 +1,15 @@
 import { createContext, useContext } from "react";
 
 type TreeContextType = {
-  expandAll: boolean;
   searchQuery: string;
+  expandAll: boolean;
   toggleSelected: (id: string, checked: boolean) => void;
 };
 
-export const TreeContext = createContext<TreeContextType | null>(null);
+export const TreeContextNew = createContext<TreeContextType | null>(null);
 
-export function useTreeContext() {
-  const ctx = useContext(TreeContext);
+export function useTreeNewContext() {
+  const ctx = useContext(TreeContextNew);
   if (!ctx) {
     throw new Error("useTreeContext must be used inside TreeProvider");
   }

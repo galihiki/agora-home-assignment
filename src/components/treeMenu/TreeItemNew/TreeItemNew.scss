@@ -1,0 +1,18 @@
+.tree-item-new-container {
+  .title-container {
+    background-color: aqua;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    width: fit-content;
+    display: flex;
+
+    .title {
+      margin: 0 1rem;
+    }
+  }
+
+  .tree-item-new-container {
+    margin-left: 4rem;
+  }
+}

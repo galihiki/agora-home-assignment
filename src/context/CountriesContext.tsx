@@ -8,14 +8,14 @@ interface CountriesContextValue {
 }
 
 export const CountriesContext = createContext<CountriesContextValue | null>(
-  null
+  null,
 );
 
 export function useCountriesContext() {
   const ctx = useContext(CountriesContext);
   if (!ctx) {
     throw new Error(
-      "useCountriesContext must be used inside CountriesProvider"
+      "useCountriesContext must be used inside CountriesProvider",
     );
   }
   return ctx;
