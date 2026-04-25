@@ -11,6 +11,7 @@ import TodoList from "./components/TodoList/TodoList";
 import MessageBoard from "./components/messageBoard/MessageBoard";
 import Table from "./components/table/table/Table";
 import TreeMenuNew from "./components/treeMenu/treeMenuNew/TreeMenuNew";
+import Wizard from "./components/Wizard/Wizard";
 
 function App() {
   const items: SideBarItem[] = [
@@ -62,6 +63,12 @@ function App() {
       iconType: "MD",
       path: "/treeMenu",
     },
+    {
+      title: "Wizard",
+      iconName: "MdAutoAwesome",
+      iconType: "MD",
+      path: "/wizard",
+    },
   ];
 
   // Fetch countries
@@ -85,6 +92,7 @@ function App() {
           <Route path="/messageBoard" element={<MessageBoard />} />
           <Route path="/table" element={<Table />} />
           <Route path="/treeMenu" element={<TreeMenuNew />} />
+          <Route path="/wizard" element={<Wizard />} />
         </Routes>
       </CountriesContext.Provider>
     </div>

@@ -1,0 +1,269 @@
+.wizard-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.wizard-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+}
+
+.progress-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #e0e0e0;
+    z-index: 0;
+  }
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+
+  .step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+
+    &.active {
+      background: #667eea;
+      color: white;
+
+      &.current {
+        border-color: #764ba2;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+      }
+    }
+  }
+
+  .step-label {
+    font-size: 13px;
+    text-align: center;
+    color: #666;
+    font-weight: 500;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+
+    .progress-step.active & {
+      color: #667eea;
+    }
+  }
+}
+
+.wizard-content {
+  margin: 30px 0;
+
+  h2 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 24px;
+  }
+
+  .step-description {
+    color: #999;
+    margin: 0 0 25px 0;
+    font-size: 14px;
+  }
+
+  .step-form {
+    min-height: 150px;
+  }
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    &::placeholder {
+      color: #ccc;
+    }
+  }
+
+  &.checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 10px;
+      cursor: pointer;
+      accent-color: #667eea;
+    }
+
+    label {
+      margin: 0;
+      font-weight: 400;
+    }
+  }
+}
+
+// ContactDetails specific styles
+.form-group {
+  input.error {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+  }
+
+  .form-error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 2px;
+    padding: 0;
+    border: none;
+    background: none;
+    display: block;
+    clear: both;
+    text-align: left;
+  }
+}
+
+.confirmation-content {
+  h3 {
+    margin: 0 0 20px 0;
+    color: #333;
+  }
+
+  .review-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+
+    .label {
+      color: #999;
+      font-weight: 500;
+    }
+
+    .value {
+      color: #333;
+      font-weight: 600;
+    }
+  }
+}
+
+.wizard-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #f0f0f0;
+
+  .btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+  }
+
+  .btn-secondary {
+    background: #f0f0f0;
+    color: #333;
+
+    &:hover:not(:disabled) {
+      background: #e0e0e0;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .wizard-card {
+    padding: 20px;
+  }
+
+  .progress-step {
+    .step-label {
+      font-size: 11px;
+      min-height: 40px;
+    }
+
+    .step-circle {
+      width: 35px;
+      height: 35px;
+      font-size: 13px;
+    }
+  }
+
+  .wizard-buttons {
+    flex-direction: column-reverse;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
