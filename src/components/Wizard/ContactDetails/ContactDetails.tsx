@@ -1,15 +1,12 @@
 import { TextField, Box } from "@mui/material";
-import { useState, type ChangeEvent } from "react";
-
-interface ContactDetailsProps {
-  email: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}
+import { useState, useEffect, type ChangeEvent } from "react";
+import type { StepComponentProps } from "types/wizard";
 
 export default function ContactDetails({
-  email,
+  formData,
   onChange,
-}: ContactDetailsProps) {
+  onErrorChange,
+}: StepComponentProps) {
   const [emailError, setEmailError] = useState<string>("");
 
   const validateEmail = (email: string): boolean => {
@@ -29,10 +26,20 @@ export default function ContactDetails({
   };
 
   const handleEmailBlur = () => {
-    if (email && !validateEmail(email)) {
+    if (!formData.email) {
+      setEmailError("Email is mandatory");
+      return;
+    }
+
+    if (!validateEmail(formData.email)) {
       setEmailError("Please enter a valid email address");
     }
   };
+
+  useEffect(() => {
+    const hasError = !formData.email || !!emailError;
+    onErrorChange(hasError);
+  }, [formData.email, emailError, onErrorChange]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -40,7 +47,7 @@ export default function ContactDetails({
         label="Email Address"
         name="email"
         type="email"
-        value={email}
+        value={formData.email}
         onChange={handleEmailChange}
         onBlur={handleEmailBlur}
         placeholder="Enter your email"

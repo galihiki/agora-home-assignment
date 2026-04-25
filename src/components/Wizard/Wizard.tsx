@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type ComponentType } from "react";
+import { useState, type ComponentType } from "react";
 import {
   Stepper,
   Step,
@@ -10,17 +10,21 @@ import {
   createTheme,
   ThemeProvider,
 } from "@mui/material";
-import { type SelectChangeEvent } from "@mui/material/Select";
 import PersonalInfo from "./PersonalInfo/PersonalInfo";
 import ContactDetails from "./ContactDetails/ContactDetails";
 import Location from "./Location/Location";
 import Confirmation from "./Confirmation/Confirmation";
+import type {
+  FormData,
+  WizardChangeEvent,
+  StepComponentProps,
+} from "types/wizard";
 
 interface WizardStep {
   id: number;
   title: string;
   description: string;
-  component: ComponentType<any>;
+  component: ComponentType<StepComponentProps>;
 }
 
 // Create a custom theme
@@ -37,13 +41,19 @@ const theme = createTheme({
 
 export default function Wizard() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: "",
     lastName: "",
     email: "",
     country: "",
     agree: false,
   });
+
+  const [stepErrors, setStepErrors] = useState<Record<number, boolean>>({});
+
+  const handleStepError = (stepId: number, hasError: boolean) => {
+    setStepErrors((prev) => ({ ...prev, [stepId]: hasError }));
+  };
 
   const steps: WizardStep[] = [
     {
@@ -72,11 +82,7 @@ export default function Wizard() {
     },
   ];
 
-  const handleInputChange = (
-    event:
-      | ChangeEvent<HTMLInputElement | HTMLSelectElement>
-      | SelectChangeEvent<string>,
-  ) => {
+  const handleInputChange = (event: WizardChangeEvent) => {
     const { name, value } = event.target;
     const type = "type" in event.target ? event.target.type : undefined;
 
@@ -121,42 +127,19 @@ export default function Wizard() {
   };
 
   const renderStepContent = () => {
-    const StepComponent = steps[currentStep].component;
+    const StepComponent = steps[currentStep]?.component;
 
-    switch (currentStep) {
-      case 0:
-        return (
-          <StepComponent
-            firstName={formData.firstName}
-            lastName={formData.lastName}
-            onChange={handleInputChange}
-          />
-        );
-      case 1:
-        return (
-          <StepComponent email={formData.email} onChange={handleInputChange} />
-        );
-      case 2:
-        return (
-          <StepComponent
-            country={formData.country}
-            onChange={handleInputChange}
-          />
-        );
-      case 3:
-        return (
-          <StepComponent
-            firstName={formData.firstName}
-            lastName={formData.lastName}
-            email={formData.email}
-            country={formData.country}
-            agree={formData.agree}
-            onChange={handleInputChange}
-          />
-        );
-      default:
-        return null;
-    }
+    if (!StepComponent) return null;
+
+    return (
+      <StepComponent
+        formData={formData}
+        onChange={handleInputChange}
+        onErrorChange={(hasError: boolean) =>
+          handleStepError(steps[currentStep].id, hasError)
+        }
+      />
+    );
   };
 
   return (
@@ -187,7 +170,9 @@ export default function Wizard() {
           <Stepper activeStep={currentStep} sx={{ mb: 4 }}>
             {steps.map((step) => (
               <Step key={step.id}>
-                <StepLabel>{step.title}</StepLabel>
+                <StepLabel error={!!stepErrors[step.id]}>
+                  {step.title}
+                </StepLabel>
               </Step>
             ))}
           </Stepper>

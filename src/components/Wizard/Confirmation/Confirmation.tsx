@@ -5,25 +5,17 @@ import {
   Checkbox,
   Divider,
 } from "@mui/material";
-import { type ChangeEvent } from "react";
-
-interface ConfirmationProps {
-  firstName: string;
-  lastName: string;
-  email: string;
-  country: string;
-  agree: boolean;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}
+import { useEffect } from "react";
+import type { StepComponentProps } from "types/wizard";
 
 export default function Confirmation({
-  firstName,
-  lastName,
-  email,
-  country,
-  agree,
+  formData,
   onChange,
-}: ConfirmationProps) {
+  onErrorChange,
+}: StepComponentProps) {
+  useEffect(() => {
+    onErrorChange(!formData.agree);
+  }, [formData.agree, onErrorChange]);
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -35,8 +27,8 @@ export default function Confirmation({
           <Typography variant="body2" color="text.secondary">
             First Name:
           </Typography>
-          <Typography variant="body2" fontWeight="medium">
-            {firstName || "Not provided"}
+          <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+            {formData.firstName || "Not provided"}
           </Typography>
         </Box>
 
@@ -44,8 +36,8 @@ export default function Confirmation({
           <Typography variant="body2" color="text.secondary">
             Last Name:
           </Typography>
-          <Typography variant="body2" fontWeight="medium">
-            {lastName || "Not provided"}
+          <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+            {formData.lastName || "Not provided"}
           </Typography>
         </Box>
 
@@ -53,8 +45,8 @@ export default function Confirmation({
           <Typography variant="body2" color="text.secondary">
             Email:
           </Typography>
-          <Typography variant="body2" fontWeight="medium">
-            {email || "Not provided"}
+          <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+            {formData.email || "Not provided"}
           </Typography>
         </Box>
 
@@ -62,8 +54,8 @@ export default function Confirmation({
           <Typography variant="body2" color="text.secondary">
             Country:
           </Typography>
-          <Typography variant="body2" fontWeight="medium">
-            {country || "Not provided"}
+          <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+            {formData.country || "Not provided"}
           </Typography>
         </Box>
       </Box>
@@ -73,7 +65,7 @@ export default function Confirmation({
       <FormControlLabel
         control={
           <Checkbox
-            checked={agree}
+            checked={formData.agree}
             onChange={onChange}
             name="agree"
             color="primary"

@@ -1,12 +1,16 @@
 import { FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
-import { type SelectChangeEvent } from "@mui/material/Select";
+import { useEffect } from "react";
+import type { StepComponentProps } from "types/wizard";
 
-interface LocationProps {
-  country: string;
-  onChange: (event: SelectChangeEvent<string>) => void;
-}
+export default function Location({
+  formData,
+  onChange,
+  onErrorChange,
+}: StepComponentProps) {
+  useEffect(() => {
+    onErrorChange(!formData.country);
+  }, [formData.country, onErrorChange]);
 
-export default function Location({ country, onChange }: LocationProps) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <FormControl fullWidth variant="outlined">
@@ -14,7 +18,7 @@ export default function Location({ country, onChange }: LocationProps) {
         <Select
           label="Country"
           name="country"
-          value={country}
+          value={formData.country}
           onChange={onChange}
         >
           <MenuItem value="">
