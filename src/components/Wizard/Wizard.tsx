@@ -39,15 +39,17 @@ const theme = createTheme({
   },
 });
 
+const initialFormData: FormData = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  country: "",
+  agree: false,
+};
+
 export default function Wizard() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<FormData>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    country: "",
-    agree: false,
-  });
+  const [formData, setFormData] = useState<FormData>(initialFormData);
 
   const [stepErrors, setStepErrors] = useState<Record<number, boolean>>({});
 
@@ -117,13 +119,7 @@ export default function Wizard() {
     );
     // Reset form
     setCurrentStep(0);
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      country: "",
-      agree: false,
-    });
+    setFormData(initialFormData);
   };
 
   const renderStepContent = () => {
