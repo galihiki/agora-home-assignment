@@ -1,4 +1,4 @@
-import { useState, type ComponentType } from "react";
+import { useState } from "react";
 import {
   Stepper,
   Step,
@@ -10,22 +10,8 @@ import {
   createTheme,
   ThemeProvider,
 } from "@mui/material";
-import PersonalInfo from "./PersonalInfo/PersonalInfo";
-import ContactDetails from "./ContactDetails/ContactDetails";
-import Location from "./Location/Location";
-import Confirmation from "./Confirmation/Confirmation";
-import type {
-  FormData,
-  WizardChangeEvent,
-  StepComponentProps,
-} from "types/wizard";
-
-interface WizardStep {
-  id: number;
-  title: string;
-  description: string;
-  component: ComponentType<StepComponentProps>;
-}
+import type { FormData, WizardChangeEvent } from "types/wizard";
+import { steps } from "./steps";
 
 // Create a custom theme
 const theme = createTheme({
@@ -56,33 +42,6 @@ export default function Wizard() {
   const handleStepError = (stepId: number, hasError: boolean) => {
     setStepErrors((prev) => ({ ...prev, [stepId]: hasError }));
   };
-
-  const steps: WizardStep[] = [
-    {
-      id: 1,
-      title: "Personal Information",
-      description: "Enter your basic details",
-      component: PersonalInfo,
-    },
-    {
-      id: 2,
-      title: "Contact Details",
-      description: "Provide your contact information",
-      component: ContactDetails,
-    },
-    {
-      id: 3,
-      title: "Location",
-      description: "Select your country",
-      component: Location,
-    },
-    {
-      id: 4,
-      title: "Confirmation",
-      description: "Review and confirm your information",
-      component: Confirmation,
-    },
-  ];
 
   const handleInputChange = (event: WizardChangeEvent) => {
     const { name, value } = event.target;

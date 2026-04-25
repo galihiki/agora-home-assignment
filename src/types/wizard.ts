@@ -1,5 +1,6 @@
 import type { ChangeEvent } from "react";
 import type { SelectChangeEvent } from "@mui/material/Select";
+import type { ComponentType } from "react";
 
 export interface FormData {
   firstName: string;
@@ -17,4 +18,11 @@ export interface StepComponentProps {
   formData: FormData;
   onChange: (event: WizardChangeEvent) => void;
   onErrorChange: (hasError: boolean) => void;
+}
+
+export interface WizardStep {
+  id: number;
+  title: string;
+  description: string;
+  component: ComponentType<StepComponentProps>;
 }
