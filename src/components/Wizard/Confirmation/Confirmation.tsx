@@ -5,23 +5,19 @@ import {
   Checkbox,
   Divider,
 } from "@mui/material";
-import { useEffect } from "react";
+import type { ChangeEvent } from "react";
 import type { StepComponentProps } from "types/wizard";
 
 export default function Confirmation({
   formData,
   onChange,
-  onErrorChange,
 }: StepComponentProps) {
-  useEffect(() => {
-    onErrorChange(!formData.agree);
-  }, [formData.agree, onErrorChange]);
+  const handleAgreeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange(event);
+  };
+
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
-        Review Your Information
-      </Typography>
-
       <Box sx={{ mb: 3 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", py: 1 }}>
           <Typography variant="body2" color="text.secondary">
@@ -52,6 +48,15 @@ export default function Confirmation({
 
         <Box sx={{ display: "flex", justifyContent: "space-between", py: 1 }}>
           <Typography variant="body2" color="text.secondary">
+            Phone:
+          </Typography>
+          <Typography variant="body2" sx={{ fontWeight: "medium" }}>
+            {formData.phone || "Not provided"}
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "space-between", py: 1 }}>
+          <Typography variant="body2" color="text.secondary">
             Country:
           </Typography>
           <Typography variant="body2" sx={{ fontWeight: "medium" }}>
@@ -66,7 +71,7 @@ export default function Confirmation({
         control={
           <Checkbox
             checked={formData.agree}
-            onChange={onChange}
+            onChange={handleAgreeChange}
             name="agree"
             color="primary"
           />
