@@ -1,5 +1,5 @@
 import { TextField, Box } from "@mui/material";
-import { useState, useEffect, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, type FocusEvent } from "react";
 import type { StepComponentProps } from "types/wizard";
 
 export default function PersonalInfo({
@@ -7,47 +7,66 @@ export default function PersonalInfo({
   onChange,
   onErrorChange,
 }: StepComponentProps) {
-  const [firstNameError, setFirstNameError] = useState<string>("");
-  const [lastNameError, setLastNameError] = useState<string>("");
+  const [touched, setTouched] = useState({
+    firstName: false,
+    lastName: false,
+  });
 
-  const validateName = (name: string, fieldName: string): string => {
+  const validateName = (name: string): string => {
     if (!name || name.trim() === "") {
-      return `${fieldName} is mandatory`;
+      return "Field is mandatory";
     }
     if (name.trim().length < 2) {
-      return `${fieldName} must be at least 2 characters`;
+      return "Must be at least 2 characters";
     }
     return "";
   };
 
-  const handleFirstNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event);
-    const error = validateName(event.target.value, "First Name");
-    setFirstNameError(error);
+  const getFieldError = (
+    field: "firstName" | "lastName",
+    value = formData[field],
+  ) => {
+    if (!touched[field]) return "";
+    return validateName(value);
   };
 
-  const handleLastNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event);
-    const error = validateName(event.target.value, "Last Name");
-    setLastNameError(error);
+  const firstNameError = getFieldError("firstName");
+  const lastNameError = getFieldError("lastName");
+
+  const reportErrors = (
+    firstName = formData.firstName,
+    lastName = formData.lastName,
+  ) => {
+    const firstError = getFieldError("firstName", firstName);
+    const lastError = getFieldError("lastName", lastName);
+    onErrorChange(!!firstError || !!lastError);
   };
 
-  const handleFirstNameBlur = () => {
-    const error = validateName(formData.firstName, "First Name");
-    setFirstNameError(error);
-  };
+  const handleChange =
+    (field: "firstName" | "lastName") =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      onChange(event);
+      if (touched[field]) {
+        if (field === "firstName") {
+          reportErrors(value, formData.lastName);
+        } else {
+          reportErrors(formData.firstName, value);
+        }
+      }
+    };
 
-  const handleLastNameBlur = () => {
-    const error = validateName(formData.lastName, "Last Name");
-    setLastNameError(error);
-  };
-
-  useEffect(() => {
-    const hasError =
-      !!validateName(formData.firstName, "First Name") ||
-      !!validateName(formData.lastName, "Last Name");
-    onErrorChange(hasError);
-  }, [formData.firstName, formData.lastName, onErrorChange]);
+  const handleBlur =
+    (field: "firstName" | "lastName") =>
+    (event: FocusEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setTouched((prev) => ({ ...prev, [field]: true }));
+      if (field === "firstName") {
+        reportErrors(value, formData.lastName);
+      } else {
+        reportErrors(formData.firstName, value);
+      }
+    };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -55,8 +74,8 @@ export default function PersonalInfo({
         label="First Name"
         name="firstName"
         value={formData.firstName}
-        onChange={handleFirstNameChange}
-        onBlur={handleFirstNameBlur}
+        onChange={handleChange("firstName")}
+        onBlur={handleBlur("firstName")}
         placeholder="Enter your first name"
         fullWidth
         variant="outlined"
@@ -67,8 +86,8 @@ export default function PersonalInfo({
         label="Last Name"
         name="lastName"
         value={formData.lastName}
-        onChange={handleLastNameChange}
-        onBlur={handleLastNameBlur}
+        onChange={handleChange("lastName")}
+        onBlur={handleBlur("lastName")}
         placeholder="Enter your last name"
         fullWidth
         variant="outlined"
