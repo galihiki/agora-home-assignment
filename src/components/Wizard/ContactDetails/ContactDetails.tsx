@@ -1,5 +1,5 @@
 import { TextField, Box } from "@mui/material";
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, type FocusEvent } from "react";
 import type { StepComponentProps } from "types/wizard";
 
 export default function ContactDetails({
@@ -7,34 +7,75 @@ export default function ContactDetails({
   onChange,
   onErrorChange,
 }: StepComponentProps) {
-  const [touched, setTouched] = useState(false);
+  const [touched, setTouched] = useState({
+    email: false,
+    phone: false,
+  });
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const getEmailError = () => {
-    if (!touched) return "";
-    if (!formData.email) {
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^\+?[0-9]{7,15}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const getEmailError = (email = formData.email) => {
+    if (!touched.email) return "";
+    if (!email) {
       return "Email is mandatory";
     }
-    if (!validateEmail(formData.email)) {
+    if (!validateEmail(email)) {
       return "Please enter a valid email address";
     }
     return "";
   };
 
+  const getPhoneError = (phone = formData.phone) => {
+    if (!touched.phone) return "";
+    if (!phone) {
+      return "Phone number is mandatory";
+    }
+    if (!validatePhone(phone)) {
+      return "Phone number must be 7-15 digits and may start with +";
+    }
+    return "";
+  };
+
   const emailError = getEmailError();
+  const phoneError = getPhoneError();
 
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event);
-    onErrorChange(!!getEmailError());
+  const reportErrors = (email = formData.email, phone = formData.phone) => {
+    const emailErrorMessage = getEmailError(email);
+    const phoneErrorMessage = getPhoneError(phone);
+    onErrorChange(!!emailErrorMessage || !!phoneErrorMessage);
   };
 
-  const handleEmailBlur = () => {
-    setTouched(true);
-  };
+  const handleChange =
+    (field: "email" | "phone") => (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      onChange(event);
+      if (touched[field]) {
+        if (field === "email") {
+          reportErrors(value, formData.phone);
+        } else {
+          reportErrors(formData.email, value);
+        }
+      }
+    };
+
+  const handleBlur =
+    (field: "email" | "phone") => (event: FocusEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setTouched((prev) => ({ ...prev, [field]: true }));
+      if (field === "email") {
+        reportErrors(value, formData.phone);
+      } else {
+        reportErrors(formData.email, value);
+      }
+    };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -43,13 +84,26 @@ export default function ContactDetails({
         name="email"
         type="email"
         value={formData.email}
-        onChange={handleEmailChange}
-        onBlur={handleEmailBlur}
+        onChange={handleChange("email")}
+        onBlur={handleBlur("email")}
         placeholder="Enter your email"
         fullWidth
         variant="outlined"
         error={!!emailError}
         helperText={emailError}
+      />
+      <TextField
+        label="Phone Number"
+        name="phone"
+        type="tel"
+        value={formData.phone}
+        onChange={handleChange("phone")}
+        onBlur={handleBlur("phone")}
+        placeholder="Enter your phone number"
+        fullWidth
+        variant="outlined"
+        error={!!phoneError}
+        helperText={phoneError}
       />
     </Box>
   );

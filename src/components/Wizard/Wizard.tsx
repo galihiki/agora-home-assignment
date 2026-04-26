@@ -29,6 +29,7 @@ const initialFormData: FormData = {
   firstName: "",
   lastName: "",
   email: "",
+  phone: "",
   country: "",
   agree: false,
 };
