@@ -1,5 +1,5 @@
 import { TextField, Box } from "@mui/material";
-import { useState, useEffect, type ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import type { StepComponentProps } from "types/wizard";
 
 export default function ContactDetails({
@@ -7,39 +7,34 @@ export default function ContactDetails({
   onChange,
   onErrorChange,
 }: StepComponentProps) {
-  const [emailError, setEmailError] = useState<string>("");
+  const [touched, setTouched] = useState(false);
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
-  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    onChange(event);
-
-    if (value && !validateEmail(value)) {
-      setEmailError("Please enter a valid email address");
-    } else {
-      setEmailError("");
+  const getEmailError = () => {
+    if (!touched) return "";
+    if (!formData.email) {
+      return "Email is mandatory";
     }
+    if (!validateEmail(formData.email)) {
+      return "Please enter a valid email address";
+    }
+    return "";
+  };
+
+  const emailError = getEmailError();
+
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onChange(event);
+    onErrorChange(!!getEmailError());
   };
 
   const handleEmailBlur = () => {
-    if (!formData.email) {
-      setEmailError("Email is mandatory");
-      return;
-    }
-
-    if (!validateEmail(formData.email)) {
-      setEmailError("Please enter a valid email address");
-    }
+    setTouched(true);
   };
-
-  useEffect(() => {
-    const hasError = !formData.email || !!emailError;
-    onErrorChange(hasError);
-  }, [formData.email, emailError, onErrorChange]);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
