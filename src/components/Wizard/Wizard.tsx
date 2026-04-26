@@ -37,7 +37,9 @@ export default function Wizard() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
 
-  const [stepErrors, setStepErrors] = useState<Record<number, boolean>>({});
+  const [stepErrors, setStepErrors] = useState<Record<number, boolean>>(
+    steps.reduce((acc, step) => ({ ...acc, [step.id]: false }), {})
+  );
 
   const handleStepError = (stepId: number, hasError: boolean) => {
     setStepErrors((prev) => ({ ...prev, [stepId]: hasError }));
