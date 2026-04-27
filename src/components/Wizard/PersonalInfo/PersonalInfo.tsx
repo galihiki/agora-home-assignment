@@ -1,5 +1,5 @@
 import { TextField, Box } from "@mui/material";
-import { useState, type ChangeEvent, type FocusEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import type { StepComponentProps } from "types/wizard";
 
 export default function PersonalInfo({
@@ -25,8 +25,9 @@ export default function PersonalInfo({
   const getFieldError = (
     field: "firstName" | "lastName",
     value = formData[field],
+    touchedState = touched
   ) => {
-    if (!touched[field]) return "";
+    if (!touchedState[field]) return "";
     return validateName(value);
   };
 
@@ -36,9 +37,10 @@ export default function PersonalInfo({
   const reportErrors = (
     firstName = formData.firstName,
     lastName = formData.lastName,
+    touchedState = touched
   ) => {
-    const firstError = getFieldError("firstName", firstName);
-    const lastError = getFieldError("lastName", lastName);
+    const firstError = getFieldError("firstName", firstName, touchedState);
+    const lastError = getFieldError("lastName", lastName, touchedState);
     onErrorChange(!!firstError || !!lastError);
   };
 
@@ -46,25 +48,15 @@ export default function PersonalInfo({
     (field: "firstName" | "lastName") =>
     (event: ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
+      const nextTouched = { ...touched, [field]: true };
       onChange(event);
-      if (touched[field]) {
-        if (field === "firstName") {
-          reportErrors(value, formData.lastName);
-        } else {
-          reportErrors(formData.firstName, value);
-        }
+      if (!touched[field]) {
+        setTouched(nextTouched);
       }
-    };
-
-  const handleBlur =
-    (field: "firstName" | "lastName") =>
-    (event: FocusEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      setTouched((prev) => ({ ...prev, [field]: true }));
       if (field === "firstName") {
-        reportErrors(value, formData.lastName);
+        reportErrors(value, formData.lastName, nextTouched);
       } else {
-        reportErrors(formData.firstName, value);
+        reportErrors(formData.firstName, value, nextTouched);
       }
     };
 
@@ -75,7 +67,6 @@ export default function PersonalInfo({
         name="firstName"
         value={formData.firstName}
         onChange={handleChange("firstName")}
-        onBlur={handleBlur("firstName")}
         placeholder="Enter your first name"
         fullWidth
         variant="outlined"
@@ -87,7 +78,6 @@ export default function PersonalInfo({
         name="lastName"
         value={formData.lastName}
         onChange={handleChange("lastName")}
-        onBlur={handleBlur("lastName")}
         placeholder="Enter your last name"
         fullWidth
         variant="outlined"

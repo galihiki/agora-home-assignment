@@ -84,6 +84,19 @@ export default function Wizard() {
     setFormData(initialFormData);
   };
 
+  const isCurrentStepMissingRequiredFields = () => {
+    switch (steps[currentStep].id) {
+      case 1:
+        return !formData.firstName.trim() || !formData.lastName.trim();
+      case 2:
+        return !formData.email.trim() || !formData.phone.trim();
+      case 3:
+        return !formData.country.trim();
+      default:
+        return false;
+    }
+  };
+
   const renderStepContent = () => {
     const StepComponent = steps[currentStep]?.component;
 
@@ -163,7 +176,14 @@ export default function Wizard() {
                 Complete
               </Button>
             ) : (
-              <Button variant="contained" onClick={handleNext}>
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                disabled={
+                  !!stepErrors[steps[currentStep].id] ||
+                  isCurrentStepMissingRequiredFields()
+                }
+              >
                 Next
               </Button>
             )}

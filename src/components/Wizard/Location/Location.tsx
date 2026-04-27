@@ -35,14 +35,9 @@ export default function Location({
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value;
     onChange(event as any);
-    if (touched) {
-      reportErrors(value);
+    if (!touched) {
+      setTouched(true);
     }
-  };
-
-  const handleBlur = () => {
-    const value = formData.country;
-    setTouched(true);
     reportErrors(value);
   };
 
@@ -55,7 +50,6 @@ export default function Location({
           name="country"
           value={formData.country}
           onChange={handleChange}
-          onBlur={handleBlur}
         >
           <MenuItem value="">
             <em>Select a country</em>
