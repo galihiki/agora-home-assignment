@@ -9,36 +9,21 @@ import {
 import { useState } from "react";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import type { StepComponentProps } from "types/wizard";
+import { validateStep } from "../wizardValidation";
 
 export default function Location({
   formData,
   onChange,
-  onErrorChange,
 }: StepComponentProps) {
   const [touched, setTouched] = useState(false);
-
-  const getCountryError = (country = formData.country) => {
-    if (!touched) return "";
-    if (!country) {
-      return "Country is mandatory";
-    }
-    return "";
-  };
-
-  const countryError = getCountryError();
-
-  const reportErrors = (country = formData.country) => {
-    const error = getCountryError(country);
-    onErrorChange(!!error);
-  };
+  const { errors } = validateStep(3, formData);
+  const countryError = touched ? (errors.country ?? "") : "";
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    const value = event.target.value;
     onChange(event as any);
     if (!touched) {
       setTouched(true);
     }
-    reportErrors(value);
   };
 
   return (

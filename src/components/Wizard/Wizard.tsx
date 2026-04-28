@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import type { FormData, WizardChangeEvent } from "types/wizard";
 import { steps } from "./steps";
+import { validateStep } from "./wizardValidation";
 
 // Create a custom theme
 const theme = createTheme({
@@ -37,18 +38,21 @@ const initialFormData: FormData = {
 export default function Wizard() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>(initialFormData);
-
-  const [stepErrors, setStepErrors] = useState<Record<number, boolean>>(
+  const [stepInteracted, setStepInteracted] = useState<Record<number, boolean>>(
     steps.reduce((acc, step) => ({ ...acc, [step.id]: false }), {}),
   );
-
-  const handleStepError = (stepId: number, hasError: boolean) => {
-    setStepErrors((prev) => ({ ...prev, [stepId]: hasError }));
-  };
 
   const handleInputChange = (event: WizardChangeEvent) => {
     const { name, value } = event.target;
     const type = "type" in event.target ? event.target.type : undefined;
+    const currentStepId = steps[currentStep].id;
+
+    setStepInteracted((prev) => {
+      if (prev[currentStepId]) {
+        return prev;
+      }
+      return { ...prev, [currentStepId]: true };
+    });
 
     if (type === "checkbox") {
       setFormData({
@@ -82,19 +86,7 @@ export default function Wizard() {
     // Reset form
     setCurrentStep(0);
     setFormData(initialFormData);
-  };
-
-  const isCurrentStepMissingRequiredFields = () => {
-    switch (steps[currentStep].id) {
-      case 1:
-        return !formData.firstName.trim() || !formData.lastName.trim();
-      case 2:
-        return !formData.email.trim() || !formData.phone.trim();
-      case 3:
-        return !formData.country.trim();
-      default:
-        return false;
-    }
+    setStepInteracted(steps.reduce((acc, step) => ({ ...acc, [step.id]: false }), {}));
   };
 
   const renderStepContent = () => {
@@ -106,12 +98,12 @@ export default function Wizard() {
       <StepComponent
         formData={formData}
         onChange={handleInputChange}
-        onErrorChange={(hasError: boolean) =>
-          handleStepError(steps[currentStep].id, hasError)
-        }
       />
     );
   };
+
+  const currentStepId = steps[currentStep].id;
+  const isCurrentStepValid = validateStep(currentStepId, formData).isValid;
 
   return (
     <ThemeProvider theme={theme}>
@@ -141,7 +133,11 @@ export default function Wizard() {
           <Stepper activeStep={currentStep} sx={{ mb: 4 }}>
             {steps.map((step) => (
               <Step key={step.id}>
-                <StepLabel error={!!stepErrors[step.id]}>
+                <StepLabel
+                  error={
+                    !!stepInteracted[step.id] && !validateStep(step.id, formData).isValid
+                  }
+                >
                   {step.title}
                 </StepLabel>
               </Step>
@@ -179,10 +175,7 @@ export default function Wizard() {
               <Button
                 variant="contained"
                 onClick={handleNext}
-                disabled={
-                  !!stepErrors[steps[currentStep].id] ||
-                  isCurrentStepMissingRequiredFields()
-                }
+                disabled={!isCurrentStepValid}
               >
                 Next
               </Button>

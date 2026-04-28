@@ -18,7 +18,6 @@ export type WizardChangeEvent =
 export interface StepComponentProps {
   formData: FormData;
   onChange: (event: WizardChangeEvent) => void;
-  onErrorChange: (hasError: boolean) => void;
 }
 
 export interface WizardStep {
