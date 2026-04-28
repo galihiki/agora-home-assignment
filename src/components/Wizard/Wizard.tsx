@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Stepper,
   Step,
@@ -34,13 +34,52 @@ const initialFormData: FormData = {
   country: "",
   agree: false,
 };
+const FORM_DATA_STORAGE_KEY = "wizardFormData";
+
+const isFormData = (value: unknown): value is FormData => {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const data = value as Record<string, unknown>;
+  return (
+    typeof data.firstName === "string" &&
+    typeof data.lastName === "string" &&
+    typeof data.email === "string" &&
+    typeof data.phone === "string" &&
+    typeof data.country === "string" &&
+    typeof data.agree === "boolean"
+  );
+};
+
+const getInitialFormData = (): FormData => {
+  const savedFormData = localStorage.getItem(FORM_DATA_STORAGE_KEY);
+  if (!savedFormData) {
+    return initialFormData;
+  }
+
+  try {
+    const parsedData: unknown = JSON.parse(savedFormData);
+    if (isFormData(parsedData)) {
+      return parsedData;
+    }
+  } catch {
+    localStorage.removeItem(FORM_DATA_STORAGE_KEY);
+  }
+
+  return initialFormData;
+};
 
 export default function Wizard() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<FormData>(() => getInitialFormData());
   const [stepInteracted, setStepInteracted] = useState<Record<number, boolean>>(
     steps.reduce((acc, step) => ({ ...acc, [step.id]: false }), {}),
   );
+
+  useEffect(() => {
+    localStorage.setItem(FORM_DATA_STORAGE_KEY, JSON.stringify(formData));
+  }, [formData]);
 
   const handleInputChange = (event: WizardChangeEvent) => {
     const { name, value } = event.target;
