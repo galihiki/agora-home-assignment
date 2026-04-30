@@ -8,8 +8,11 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import type { SelectChangeEvent } from "@mui/material/Select";
+import { getNames } from "country-list";
 import type { StepComponentProps } from "types/wizard";
 import { validateStep } from "../wizardValidation";
+
+const countries = getNames();
 
 export default function Location({
   formData,
@@ -35,15 +38,32 @@ export default function Location({
           name="country"
           value={formData.country}
           onChange={handleChange}
+          MenuProps={{
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left",
+            },
+            transformOrigin: {
+              vertical: "top",
+              horizontal: "left",
+            },
+            slotProps: {
+              paper: {
+                sx: {
+                  maxHeight: 250,
+                },
+              },
+            },
+          }}
         >
           <MenuItem value="">
             <em>Select a country</em>
           </MenuItem>
-          <MenuItem value="usa">United States</MenuItem>
-          <MenuItem value="uk">United Kingdom</MenuItem>
-          <MenuItem value="canada">Canada</MenuItem>
-          <MenuItem value="france">France</MenuItem>
-          <MenuItem value="germany">Germany</MenuItem>
+          {countries.map((country) => (
+            <MenuItem key={country} value={country}>
+              {country}
+            </MenuItem>
+          ))}
         </Select>
         {countryError && <FormHelperText>{countryError}</FormHelperText>}
       </FormControl>
