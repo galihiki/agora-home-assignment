@@ -12,6 +12,7 @@ import MessageBoard from "./components/messageBoard/MessageBoard";
 import Table from "./components/table/table/Table";
 import TreeMenuNew from "./components/treeMenu/treeMenuNew/TreeMenuNew";
 import Wizard from "./components/Wizard/Wizard";
+import EventList from "./components/EventList/eventList";
 
 function App() {
   const items: SideBarItem[] = [
@@ -69,6 +70,12 @@ function App() {
       iconType: "MD",
       path: "/wizard",
     },
+    {
+      title: "Event List",
+      iconName: "MdList",
+      iconType: "MD",
+      path: "/eventList",
+    },
   ];
 
   // Fetch countries
@@ -93,6 +100,7 @@ function App() {
           <Route path="/table" element={<Table />} />
           <Route path="/treeMenu" element={<TreeMenuNew />} />
           <Route path="/wizard" element={<Wizard />} />
+          <Route path="/eventList" element={<EventList />} />
         </Routes>
       </CountriesContext.Provider>
     </div>
