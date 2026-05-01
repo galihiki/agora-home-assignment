@@ -1,14 +1,14 @@
 import List from "../GenericComponents/List";
 import { eventMockData, type EventItem } from "./eventMockData";
-import "./eventList.scss";
 import EventItemComponent from "./EventItem/EventItem";
+import { Box } from "@mui/material";
 
 export default function EventList() {
   const renderEvent = (event: EventItem) => <EventItemComponent event={event} />;
 
   return (
-    <div className="event-list-container">
+    <Box sx={{ height: "100%", width: "100%", overflowY: "hidden", p: 2 }}>
       <List items={eventMockData.events} renderItem={renderEvent} />
-    </div>
+    </Box>
   );
 }
