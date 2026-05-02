@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import List from "../GenericComponents/List";
 import { eventMockData, type EventItem } from "./eventMockData";
 import EventItemComponent from "./EventItem/EventItem";
@@ -11,76 +11,63 @@ const SCROLL_PAGE_SIZE = 10;
 const INITIAL_FETCH_DELAY_MS = 600;
 const LOAD_MORE_DELAY_MS = 400;
 
+function filterEvents(events: EventItem[], userFilter: string, actionFilter: string) {
+  return events.filter((event) => {
+    const userOk = !userFilter || event.user === userFilter;
+    const actionOk = !actionFilter || event.action === actionFilter;
+    return userOk && actionOk;
+  });
+}
+
 export default function EventList() {
-  const [items, setItems] = useState<EventItem[]>([]);
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [listLoading, setListLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [userFilter, setUserFilter] = useState("");
   const [actionFilter, setActionFilter] = useState("");
 
+  const filteredAllEvents = useMemo(
+    () => filterEvents(ALL_EVENTS, userFilter, actionFilter),
+    [userFilter, actionFilter],
+  );
+
+  const filteredTotalRef = useRef(0);
+  filteredTotalRef.current = filteredAllEvents.length;
+
   useEffect(() => {
     let cancelled = false;
 
-    const loadInitial = async () => {
+    const fetchFirstPage = async () => {
+      setListLoading(true);
       await new Promise((resolve) => setTimeout(resolve, INITIAL_FETCH_DELAY_MS));
       if (cancelled) return;
-      setItems(ALL_EVENTS.slice(0, INITIAL_COUNT));
-      setInitialLoading(false);
+      setLoadedCount(Math.min(INITIAL_COUNT, filteredAllEvents.length));
+      setListLoading(false);
     };
 
-    void loadInitial();
+    void fetchFirstPage();
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [userFilter, actionFilter, filteredAllEvents]);
 
   const loadMore = useCallback(async () => {
     setLoadingMore(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, LOAD_MORE_DELAY_MS));
-      setItems((prev) => {
-        if (prev.length >= ALL_EVENTS.length) {
-          return prev;
-        }
-        const next = ALL_EVENTS.slice(prev.length, prev.length + SCROLL_PAGE_SIZE);
-        return [...prev, ...next];
-      });
+      setLoadedCount((prev) =>
+        Math.min(prev + SCROLL_PAGE_SIZE, filteredTotalRef.current),
+      );
     } finally {
       setLoadingMore(false);
     }
   }, []);
 
-  const hasMore = items.length < ALL_EVENTS.length;
-
-  const filteredItems = useMemo(
-    () =>
-      items.filter((event) => {
-        const userOk = !userFilter || event.user === userFilter;
-        const actionOk = !actionFilter || event.action === actionFilter;
-        return userOk && actionOk;
-      }),
-    [items, userFilter, actionFilter],
-  );
+  const displayedItems = filteredAllEvents.slice(0, loadedCount);
+  const hasMore = loadedCount < filteredAllEvents.length;
 
   const renderEvent = (event: EventItem) => <EventItemComponent event={event} />;
-
-  if (initialLoading) {
-    return (
-      <Box
-        sx={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          p: 2,
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
 
   return (
     <Box
@@ -100,14 +87,27 @@ export default function EventList() {
         onUserFilterChange={setUserFilter}
         onActionFilterChange={setActionFilter}
       />
-      <Box sx={{ flex: 1, minHeight: 0 }}>
-        <List
-          items={filteredItems}
-          renderItem={renderEvent}
-          onLoadMore={loadMore}
-          hasMore={hasMore}
-          loadingMore={loadingMore}
-        />
+      <Box sx={{ flex: 1, minHeight: 0, position: "relative" }}>
+        {listLoading ? (
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <List
+            items={displayedItems}
+            renderItem={renderEvent}
+            onLoadMore={loadMore}
+            hasMore={hasMore}
+            loadingMore={loadingMore}
+          />
+        )}
       </Box>
     </Box>
   );
