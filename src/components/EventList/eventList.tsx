@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import List from "../GenericComponents/List";
 import { eventMockData, type EventItem } from "./eventMockData";
 import EventItemComponent from "./EventItem/EventItem";
+import EventFilters from "./EventFilters";
 import { Box, CircularProgress } from "@mui/material";
 
 const ALL_EVENTS = eventMockData.events;
@@ -14,6 +15,8 @@ export default function EventList() {
   const [items, setItems] = useState<EventItem[]>([]);
   const [initialLoading, setInitialLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [userFilter, setUserFilter] = useState("");
+  const [actionFilter, setActionFilter] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -50,6 +53,16 @@ export default function EventList() {
 
   const hasMore = items.length < ALL_EVENTS.length;
 
+  const filteredItems = useMemo(
+    () =>
+      items.filter((event) => {
+        const userOk = !userFilter || event.user === userFilter;
+        const actionOk = !actionFilter || event.action === actionFilter;
+        return userOk && actionOk;
+      }),
+    [items, userFilter, actionFilter],
+  );
+
   const renderEvent = (event: EventItem) => <EventItemComponent event={event} />;
 
   if (initialLoading) {
@@ -70,14 +83,32 @@ export default function EventList() {
   }
 
   return (
-    <Box sx={{ height: "100%", width: "100%", overflowY: "hidden", p: 2 }}>
-      <List
-        items={items}
-        renderItem={renderEvent}
-        onLoadMore={loadMore}
-        hasMore={hasMore}
-        loadingMore={loadingMore}
+    <Box
+      sx={{
+        height: "100%",
+        width: "100%",
+        overflowY: "hidden",
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+      }}
+    >
+      <EventFilters
+        userFilter={userFilter}
+        actionFilter={actionFilter}
+        onUserFilterChange={setUserFilter}
+        onActionFilterChange={setActionFilter}
       />
+      <Box sx={{ flex: 1, minHeight: 0 }}>
+        <List
+          items={filteredItems}
+          renderItem={renderEvent}
+          onLoadMore={loadMore}
+          hasMore={hasMore}
+          loadingMore={loadingMore}
+        />
+      </Box>
     </Box>
   );
 }

@@ -5,7 +5,7 @@ export interface EventItem {
   timestamp: number;
 }
 
-const users = [
+export const EVENT_USERS = [
   "Alice",
   "Bob",
   "Charlie",
@@ -14,15 +14,18 @@ const users = [
   "Fiona",
   "George",
   "Hana",
-];
+] as const;
 
-const actions = [
+export const EVENT_ACTIONS = [
   "uploaded_file",
   "downloaded_file",
   "deleted_file",
   "shared_file",
   "updated_profile",
-];
+] as const;
+
+const users = EVENT_USERS;
+const actions = EVENT_ACTIONS;
 
 const baseTimestamp = 1710000000000;
 
