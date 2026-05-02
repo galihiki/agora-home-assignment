@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode, type UIEvent } from "react";
+import { useEffect, useState, type ReactNode, type UIEvent } from "react";
 import { Box, List as MuiList, ListItem } from "@mui/material";
 
 interface ListProps<T> {
@@ -14,15 +14,11 @@ export default function List<T>({
   initialItemsToShow,
   itemsPerScrollLoad,
 }: ListProps<T>) {
-  const safeInitialItems = useMemo(() => {
-    const value = initialItemsToShow ?? items.length;
-    return Math.max(0, Math.min(value, items.length));
-  }, [initialItemsToShow, items.length]);
+  const initialValue = initialItemsToShow ?? items.length;
+  const safeInitialItems = Math.max(0, Math.min(initialValue, items.length));
 
-  const safeItemsPerScrollLoad = useMemo(() => {
-    const value = itemsPerScrollLoad ?? items.length;
-    return Math.max(1, value);
-  }, [itemsPerScrollLoad, items.length]);
+  const perScrollValue = itemsPerScrollLoad ?? items.length;
+  const safeItemsPerScrollLoad = Math.max(1, perScrollValue);
 
   const [visibleCount, setVisibleCount] = useState(safeInitialItems);
 
