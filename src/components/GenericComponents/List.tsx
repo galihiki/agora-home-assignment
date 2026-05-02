@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, type ReactNode, type UIEvent } from "react";
+import {
+  memo,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type UIEvent,
+} from "react";
 import { Box, LinearProgress, List as MuiList, ListItem } from "@mui/material";
 
 /** Items must expose a stable `id` for keys and list identity. */
@@ -15,7 +22,7 @@ interface ListProps<T extends ListItemWithId> {
   loadingMore?: boolean;
 }
 
-export default function List<T extends ListItemWithId>({
+function ListInner<T extends ListItemWithId>({
   items,
   renderItem,
   initialItemsToShow,
@@ -25,7 +32,6 @@ export default function List<T extends ListItemWithId>({
   loadingMore = false,
 }: ListProps<T>) {
   const loadMoreInFlight = useRef(false);
-
   const initialValue = initialItemsToShow ?? items.length;
   const safeInitialItems = Math.max(0, Math.min(initialValue, items.length));
 
@@ -92,3 +98,5 @@ export default function List<T extends ListItemWithId>({
     </Box>
   );
 }
+
+export default memo(ListInner) as typeof ListInner;
